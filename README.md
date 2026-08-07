@@ -9,7 +9,7 @@ Controls v8), built as a portfolio project with Streamlit.
 ![Python](https://img.shields.io/badge/python-3.11-blue)
 ![Streamlit](https://img.shields.io/badge/streamlit-1.37-red)
 ![License](https://img.shields.io/badge/license-MIT-green)
-[![CI](https://github.com/<your-username>/iso27001-grc-suite/actions/workflows/ci.yml/badge.svg)](https://github.com/<your-username>/iso27001-grc-suite/actions/workflows/ci.yml)
+[![CI](https://github.com/mr3ddy94/iso27001-grc-suite/actions/workflows/ci.yml/badge.svg)](https://github.com/mr3ddy94/iso27001-grc-suite/actions/workflows/ci.yml)
 
 ---
 
