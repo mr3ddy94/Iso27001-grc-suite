@@ -25,8 +25,7 @@ Controls v8), built as a portfolio project with Streamlit.
 - Sidebar reset button + link to the in-app User Guide
 
 ### 0. User Guide (`pages/0_User_Guide.py`)
-A short, self-contained orientation page aimed at anyone testing the app —
-a hiring manager, recruiter, or reviewer — explaining what each page does and
+A short, self-contained orientation page aimed at anyone testing the app — explaining what each page does and
 walking through the live-editing demo in ~30 seconds.
 
 ### 2. Control Drilldown (`pages/1_Control_Drilldown.py`)
