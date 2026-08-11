@@ -24,7 +24,7 @@ Controls v8), built as a portfolio project with Streamlit.
 - "Needs attention" tables: high-risk gaps, overdue reviews
 - Sidebar reset button + link to the in-app User Guide
 
-### 0. User Guide (`pages/0_User_Guide.py`)
+### 1.1. User Guide (`pages/0_User_Guide.py`)
 A short, self-contained orientation page aimed at anyone testing the app — explaining what each page does and
 walking through the live-editing demo in ~30 seconds.
 
