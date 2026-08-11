@@ -10,7 +10,9 @@ from utils.data_loader import (
     STATUS_COLORS,
     THEME_ORDER,
     compliance_summary,
-    load_controls,
+    get_working_controls,
+    has_session_edits,
+    reset_working_controls,
 )
 
 st.set_page_config(
@@ -36,11 +38,28 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-df = load_controls()
+df = get_working_controls()
 summary = compliance_summary(df)
 
 st.title("🛡️ ISO/IEC 27001:2022 Compliance Dashboard")
 st.caption("Sample GRC portfolio project — Annex A controls (93), mock ISMS data")
+
+with st.sidebar:
+    st.markdown("### 🧪 This is a live, editable demo")
+    st.write(
+        "Head to **Control Drilldown** to edit any control's status, evidence, "
+        "owner or risk — these numbers update in real time. Edits are private "
+        "to your browser session and never change the underlying dataset."
+    )
+    st.page_link("pages/0_User_Guide.py", label="How to use this app", icon="📖")
+    st.divider()
+    if has_session_edits():
+        st.warning("You have unsaved-to-repo session edits active.")
+        if st.button("↩️ Reset to original sample data", use_container_width=True):
+            reset_working_controls()
+            st.rerun()
+    else:
+        st.caption("No edits made yet this session.")
 
 # ---- Top metrics row ----
 c1, c2, c3 = st.columns([1.3, 1, 1])
@@ -152,7 +171,8 @@ with a2:
         st.dataframe(overdue, hide_index=True, use_container_width=True)
 
 st.divider()
-st.page_link("pages/1_Control_Drilldown.py", label="➡️ Drill into individual controls", icon="🔍")
+st.page_link("pages/0_User_Guide.py", label="📖 New here? Read the user guide first", icon="📖")
+st.page_link("pages/1_Control_Drilldown.py", label="➡️ Drill into individual controls (editable)", icon="🔍")
 st.page_link("pages/2_Framework_Crosswalk.py", label="➡️ Explore the Framework Crosswalk tool", icon="🔗")
 
 st.caption(

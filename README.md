@@ -9,7 +9,7 @@ Controls v8), built as a portfolio project with Streamlit.
 ![Python](https://img.shields.io/badge/python-3.11-blue)
 ![Streamlit](https://img.shields.io/badge/streamlit-1.37-red)
 ![License](https://img.shields.io/badge/license-MIT-green)
-[![CI](https://github.com/mr3ddy94/iso27001-grc-suite/actions/workflows/ci.yml/badge.svg)](https://github.com/mr3ddy94/iso27001-grc-suite/actions/workflows/ci.yml)
+[![CI](https://github.com/<your-username>/iso27001-grc-suite/actions/workflows/ci.yml/badge.svg)](https://github.com/<your-username>/iso27001-grc-suite/actions/workflows/ci.yml)
 
 ---
 
@@ -22,10 +22,28 @@ Controls v8), built as a portfolio project with Streamlit.
 - Donut chart of status mix + stacked bar of compliance by Annex A theme
   (Organizational / People / Physical / Technological)
 - "Needs attention" tables: high-risk gaps, overdue reviews
+- Sidebar reset button + link to the in-app User Guide
+
+### 0. User Guide (`pages/0_User_Guide.py`)
+A short, self-contained orientation page aimed at anyone testing the app —
+a hiring manager, recruiter, or reviewer — explaining what each page does and
+walking through the live-editing demo in ~30 seconds.
 
 ### 2. Control Drilldown (`pages/1_Control_Drilldown.py`)
-Filterable register of all **93 ISO/IEC 27001:2022 Annex A controls**. For each
-control:
+Filterable register of all **93 ISO/IEC 27001:2022 Annex A controls**, and
+the app's interactive centrepiece: **select any control and edit its status,
+owner, risk, evidence, gap, or remediation action live.** Saved edits update
+the Dashboard's metrics and charts immediately.
+
+Edits are stored in `st.session_state`, scoped to that visitor's browser
+session only — nothing is written back to the CSV on disk, and one visitor's
+edits are invisible to another's session. A **Reset to original sample data**
+button (sidebar) discards session edits at any time. This makes the app
+genuinely testable by a hiring manager rather than a static screenshot: they
+can change a control's status and watch the compliance % and gap counters
+respond in real time.
+
+For each control:
 
 | Field | |
 |---|---|
@@ -86,10 +104,11 @@ schema change and no app code change required.
 iso27001-grc-suite/
 ├── app.py                          # Dashboard (entry point)
 ├── pages/
-│   ├── 1_Control_Drilldown.py
+│   ├── 0_User_Guide.py             # orientation for testers/reviewers
+│   ├── 1_Control_Drilldown.py      # includes live in-session editing
 │   └── 2_Framework_Crosswalk.py
 ├── utils/
-│   └── data_loader.py              # shared data loading + metrics
+│   └── data_loader.py              # shared data loading, metrics, session-edit helpers
 ├── data/
 │   ├── controls.csv                # 93 Annex A controls, mock GRC data
 │   ├── crosswalk.csv               # ISO -> {NIST CSF, CIS Controls v8}, long format
@@ -129,7 +148,8 @@ python data/validate_data.py
 
 - [ ] Add COBIT, PCI DSS, SOC 2, GDPR, DORA, NIS2 to the crosswalk
       (append rows to `data/crosswalk.csv` with a new `target_framework` value)
-- [ ] Persist control edits (SQLite/Supabase) instead of static CSV
+- [ ] Persist edits (SQLite/Supabase) so changes survive a page refresh,
+      instead of session-only state
 - [ ] Auth + multi-tenant support for real ISMS use
 - [ ] Evidence file upload per control
 - [ ] Statement of Applicability (SoA) export as a formatted Word/PDF doc
