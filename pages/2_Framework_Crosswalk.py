@@ -4,7 +4,7 @@ from pathlib import Path
 import streamlit as st
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
-from utils.data_loader import load_controls, load_crosswalk
+from utils.data_loader import get_working_controls, load_crosswalk
 
 st.set_page_config(page_title="Framework Crosswalk", page_icon="🔗", layout="wide")
 st.title("🔗 Framework Crosswalk Tool")
@@ -18,7 +18,7 @@ st.info(
     icon="ℹ️",
 )
 
-controls = load_controls()
+controls = get_working_controls()
 crosswalk = load_crosswalk()
 
 available_frameworks = sorted(crosswalk["target_framework"].unique().tolist())

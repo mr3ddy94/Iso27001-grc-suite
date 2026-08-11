@@ -1,16 +1,38 @@
 import sys
+from datetime import date
 from pathlib import Path
 
 import streamlit as st
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
-from utils.data_loader import RISK_COLORS, STATUS_COLORS, THEME_ORDER, load_controls
+from utils.data_loader import (
+    RISK_COLORS,
+    STATUS_COLORS,
+    THEME_ORDER,
+    get_working_controls,
+    has_session_edits,
+    reset_working_controls,
+    update_control,
+)
 
 st.set_page_config(page_title="Control Drilldown", page_icon="🔍", layout="wide")
 st.title("🔍 Control Drilldown")
 st.caption("Filter and inspect individual ISO/IEC 27001:2022 Annex A controls")
 
-df = load_controls()
+with st.sidebar:
+    st.markdown("### 🧪 Live demo")
+    st.write(
+        "Select a control below, expand **Edit this control**, change its "
+        "status/owner/evidence/etc., and save. The Dashboard's numbers "
+        "update immediately to reflect your change."
+    )
+    if has_session_edits():
+        st.warning("Session edits active.")
+        if st.button("↩️ Reset to original sample data", use_container_width=True):
+            reset_working_controls()
+            st.rerun()
+
+df = get_working_controls()
 
 # ---- Filters ----
 f1, f2, f3, f4 = st.columns(4)
@@ -55,7 +77,7 @@ with table_col:
         filtered[["control_id", "requirement", "theme", "status", "owner", "risk"]],
         hide_index=True,
         use_container_width=True,
-        height=520,
+        height=460,
     )
     options = filtered["control_id"].tolist()
     selected_id = st.selectbox("Select a control to view full detail", options) if options else None
@@ -95,6 +117,45 @@ with detail_col:
             st.warning(row["gap"])
         st.markdown("**Remediation Action**")
         st.write(row["remediation_action"])
+
+        with st.expander("✏️ Edit this control (live demo)"):
+            st.caption(
+                "Try it: change the status to 'Not Implemented' and set risk to "
+                "'High', save, then check the Dashboard — the gap counters and "
+                "charts update immediately."
+            )
+            with st.form(key=f"edit_form_{selected_id}"):
+                new_status = st.selectbox(
+                    "Status",
+                    ["Implemented", "Partially Implemented", "Not Implemented", "Not Applicable"],
+                    index=["Implemented", "Partially Implemented", "Not Implemented", "Not Applicable"].index(row["status"]),
+                )
+                new_owner = st.text_input("Control Owner", value=row["owner"])
+                new_risk = st.selectbox(
+                    "Risk", ["Low", "Medium", "High", "N/A"],
+                    index=["Low", "Medium", "High", "N/A"].index(row["risk"]) if row["risk"] in ["Low", "Medium", "High", "N/A"] else 0,
+                )
+                new_next_review = st.date_input("Next Review", value=row["next_review"].date())
+                new_evidence = st.text_area("Evidence", value=row["evidence"])
+                new_gap = st.text_area("Gap", value=row["gap"])
+                new_remediation = st.text_area("Remediation Action", value=row["remediation_action"])
+
+                submitted = st.form_submit_button("💾 Save changes", use_container_width=True)
+                if submitted:
+                    update_control(
+                        selected_id,
+                        {
+                            "status": new_status,
+                            "owner": new_owner,
+                            "risk": new_risk,
+                            "next_review": new_next_review,
+                            "evidence": new_evidence,
+                            "gap": new_gap,
+                            "remediation_action": new_remediation,
+                        },
+                    )
+                    st.success(f"{selected_id} updated for this session.")
+                    st.rerun()
     else:
         st.info("No controls match the current filters.")
 
