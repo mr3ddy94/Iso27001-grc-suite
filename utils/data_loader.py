@@ -34,6 +34,42 @@ def load_controls() -> pd.DataFrame:
     return df
 
 
+def get_working_controls() -> pd.DataFrame:
+    """Session-scoped, editable copy of the controls dataset.
+
+    This is what pages should call (instead of load_controls directly) so
+    that live edits made through the Control Drilldown page are reflected
+    everywhere in the app for that visitor's session — without ever writing
+    back to the CSV on disk. Each browser session gets its own independent
+    copy, so one visitor's edits never affect another's, and the underlying
+    sample data in the repo is never modified.
+    """
+    if "controls_df" not in st.session_state:
+        st.session_state["controls_df"] = load_controls().copy()
+    return st.session_state["controls_df"]
+
+
+def update_control(control_id: str, updates: dict) -> None:
+    """Apply an in-session edit to a single control row."""
+    df = get_working_controls()
+    idx = df.index[df["control_id"] == control_id]
+    if len(idx):
+        for key, value in updates.items():
+            df.loc[idx, key] = value
+        st.session_state["controls_df"] = df
+
+
+def reset_working_controls() -> None:
+    """Discard session edits and restore the original sample dataset."""
+    st.session_state["controls_df"] = load_controls().copy()
+
+
+def has_session_edits() -> bool:
+    if "controls_df" not in st.session_state:
+        return False
+    return not st.session_state["controls_df"].equals(load_controls())
+
+
 @st.cache_data
 def load_crosswalk() -> pd.DataFrame:
     return pd.read_csv(DATA_DIR / "crosswalk.csv", keep_default_na=False, na_values=[])
