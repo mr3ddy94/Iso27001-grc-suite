@@ -3,6 +3,7 @@
 A mini compliance management system combining an **ISO/IEC 27001:2022 Compliance
 Dashboard** with a **Framework Crosswalk Tool** (ISO 27001 ↔ NIST CSF 2.0 ↔ CIS
 Controls v8), built as a portfolio project with Streamlit.
+https://iso27001mr3ddy94.streamlit.app
 
 **Live demo:** _add your Streamlit Community Cloud URL here once deployed_
 
@@ -15,7 +16,7 @@ Controls v8), built as a portfolio project with Streamlit.
 
 ## What it does
 
-### 1. Compliance Dashboard (`app.py`)
+### 1. Compliance Dashboard 
 - Overall weighted compliance % (Implemented + ½×Partial, over applicable controls)
 - Status breakdown: Implemented / Partially Implemented / Not Implemented / Not Applicable
 - High priority gaps and overdue evidence review counters
@@ -24,11 +25,11 @@ Controls v8), built as a portfolio project with Streamlit.
 - "Needs attention" tables: high-risk gaps, overdue reviews
 - Sidebar reset button + link to the in-app User Guide
 
-### 1.1. User Guide (`pages/0_User_Guide.py`)
+### 1.1. User Guide 
 A short, self-contained orientation page aimed at anyone testing the app — explaining what each page does and
 walking through the live-editing demo in ~30 seconds.
 
-### 2. Control Drilldown (`pages/1_Control_Drilldown.py`)
+### 2. Control Drilldown 
 Filterable register of all **93 ISO/IEC 27001:2022 Annex A controls**, and
 the app's interactive centrepiece: **select any control and edit its status,
 owner, risk, evidence, gap, or remediation action live.** Saved edits update
@@ -59,7 +60,7 @@ For each control:
 Filter by theme, status, owner, risk, or free-text search; export the filtered
 view to CSV.
 
-### 3. Framework Crosswalk Tool (`pages/2_Framework_Crosswalk.py`)
+### 3. Framework Crosswalk Tool 
 Maps each ISO 27001 Annex A control to its closest **NIST CSF 2.0** function/category
 and **CIS Controls v8** control, e.g.:
 
