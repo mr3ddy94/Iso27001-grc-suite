@@ -3,9 +3,9 @@
 A mini compliance management system combining an **ISO/IEC 27001:2022 Compliance
 Dashboard** with a **Framework Crosswalk Tool** (ISO 27001 ↔ NIST CSF 2.0 ↔ CIS
 Controls v8), built as a portfolio project with Streamlit.
-https://iso27001mr3ddy94.streamlit.app
 
-**Live demo:** _add your Streamlit Community Cloud URL here once deployed_
+
+**Live demo:** (https://iso27001mr3ddy94.streamlit.app)
 
 ![Python](https://img.shields.io/badge/python-3.11-blue)
 ![Streamlit](https://img.shields.io/badge/streamlit-1.37-red)
